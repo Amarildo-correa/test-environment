@@ -14,6 +14,11 @@ target = "1.2"
 [[needs.module]]
 id = "/com.amazon.vega.os@IVega_1_2"
 
+# Teclado virtual do sistema para o campo da tela Buscar.
+[wants]
+[[wants.service]]
+id = "com.amazon.inputmethod.service"
+
 [components]
 [[components.interactive]]
 id = "com.helloworldtv.app.main"

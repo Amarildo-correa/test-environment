@@ -14,9 +14,12 @@ export function SearchScreen({ navigation, route }: Props) {
   const initialQuery = route.params?.query ?? '';
   const [text, setText] = useState(initialQuery);
   const [query, setQuery] = useState(initialQuery);
+  const [inputFocused, setInputFocused] = useState(false);
   const results = useMemo(() => searchArticles(query), [query]);
 
   const submit = useCallback(() => setQuery(text), [text]);
+  const handleInputFocus = useCallback(() => setInputFocused(true), []);
+  const handleInputBlur = useCallback(() => setInputFocused(false), []);
   const openArticle = useCallback(
     (id: string) => navigation.navigate('Detail', { id }),
     [navigation],
@@ -33,7 +36,9 @@ export function SearchScreen({ navigation, route }: Props) {
         placeholderTextColor={colors.divider}
         returnKeyType="search"
         hasTVPreferredFocus={results.length === 0}
-        style={styles.input}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+        style={inputFocused ? styles.inputFocused : styles.input}
         accessibilityLabel="Campo de busca"
       />
 
@@ -59,6 +64,15 @@ export function SearchScreen({ navigation, route }: Props) {
   );
 }
 
+const input = {
+  color: colors.white,
+  fontSize: px(40),
+  borderWidth: px(4),
+  borderColor: colors.divider,
+  paddingVertical: px(16),
+  paddingHorizontal: px(28),
+} as const;
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -72,14 +86,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: px(24),
   },
-  input: {
-    color: colors.white,
-    fontSize: px(40),
-    borderWidth: px(4),
-    borderColor: colors.divider,
-    paddingVertical: px(16),
-    paddingHorizontal: px(28),
-  },
+  input,
+  // Borda branca mostra que o campo tem o foco; OK abre o teclado.
+  inputFocused: { ...input, borderColor: colors.white },
   summary: {
     color: colors.white,
     fontSize: px(36),
