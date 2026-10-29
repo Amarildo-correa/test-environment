@@ -14,9 +14,26 @@ target = "1.2"
 [[needs.module]]
 id = "/com.amazon.vega.os@IVega_1_2"
 
+# Content Launcher: pedidos da Alexa ("Alexa, procure ... no Hello World").
+[[needs.module]]
+id = "/com.amazon.kepler.media@IContentLauncher1"
+
 [components]
 [[components.interactive]]
 id = "com.helloworldtv.app.main"
 runtime-module = "/com.amazon.kepler.runtime.react_native_kepler_4@IReactNativeKepler_0"
 launch-type = "singleton"
-categories = ["com.amazon.category.main"]
+# "kepler.media" é exigida no componente que atende o Content Launcher.
+categories = ["com.amazon.category.main", "com.amazon.category.kepler.media"]
+
+[[extras]]
+key = "interface.provider"
+component-id = "com.helloworldtv.app.main"
+
+[extras.value.application]
+[[extras.value.application.interface]]
+interface_name = "com.amazon.kepler.media.IContentLauncherServer"
+attribute_options = ["partner-id"]
+# Provisório: o Partner ID real é fornecido pela Amazon junto com a
+# ingestão do catálogo (ver vega/NextSteps.md).
+static-values = { partner-id = "helloworldtv-pending" }

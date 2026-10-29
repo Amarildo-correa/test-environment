@@ -19,6 +19,14 @@ These actions MUST be completed by you outside the codebase. The migration workf
 - [ ] If targeting both FOS and Vega: Submit both binaries under the same app listing (same package name required: `com.helloworldtv.app`)
   - 📄 https://developer.amazon.com/docs/app-submission/submitting-apps-to-amazon-appstore.html#target-vega-fire-os
 
+### Alexa abrir um card por voz (Content Launcher)
+- [ ] Obter da Amazon o **Partner ID** do app e trocar o provisório `helloworldtv-pending` em `manifest.toml` (`static-values`). Sem ele, a Alexa de verdade não encaminha pedidos ao app; o `kcp-cli-v2` do aparelho continua funcionando.
+  - 📄 https://developer.amazon.com/docs/vega/0.24/content-launcher-overview
+- [ ] Ingestão de catálogo (CDF) com os 6 cards, usando o id do card (`1`–`6`) como `<ID>`/`amzn_id`. É o que faz a Alexa reconhecer "Desenvolva para a experiência na TV" como conteúdo do Hello World.
+  - 📄 https://developer.amazon.com/docs/catalog/catalog-integration.html
+- [ ] Trocar para o **Target Navigator** (`com.amazon.kepler.media.ITargetNavigator`) quando o pacote `@amazon-devices/vega-target-navigator-provider` for publicado no npm: ele foi feito para "ir a uma tela/seção" sem catálogo. Em 2026-10-29 o pacote não existe no npm nem no SDK 0.24.9785, e a Amazon diz que o guia está "in development". O aparelho já aceita `kcp-cli-v2 target-navigator`.
+- Account Login e Media Controls não foram integrados: o app não tem login nem mídia. A Amazon recomenda Account Login para apps com catálogo; reavaliar junto com o Partner ID.
+
 ---
 
 ## 🔧 Code Gaps — Needs Manual Review
@@ -32,6 +40,7 @@ These actions MUST be completed by you outside the codebase. The migration workf
 | 5 | Versões `@amazon-devices/*` sem a Vega CLI local (`package.json`) | medium | `vega project install <pkg>` não rodou no WSL; as versões vieram da Package Version Matrix (coluna RN 0.83) | Resolvido: o CI rodou `vega project install --fix` (versões ajustadas ao perfil do SDK, ex. `~4.0.0+rn0.83.0`) e o `package.json` alinhado voltou ao repositório. `vega project doctor --rn-version 0.83`: todas as verificações críticas passaram; 1 aviso de pacotes fora do perfil (`kepler-performance-api`, exceção prevista pela política; `react-native-screens`; `eslint-plugin-kepler`). |
 | 6 | Lista anti-padrões (Etapa 9c) | high | O template não ativa o React Compiler | Cards da Home extraídos para `ArticleCard` (memo) com handlers em `useCallback`; estilos sem arrays inline; `Focusable` com `useCallback`/`useMemo`. |
 | 7 | `@amazon-devices/react-native-gesture-handler` (`package.json`, `src/App.tsx`) | medium | O `react-navigation__stack` do Vega importa o gesture-handler (peer `^4.0.0`), mas a KB de navegação não o lista entre os pacotes mínimos; o primeiro build no CI falhou no Jest por isso | Adicionado `~4.0.1` (Package Version Matrix, RN 0.83) e `GestureHandlerRootView` envolvendo o app, como no exemplo da documentação react-navigation 8.0.0 do Vega. Conferir no aparelho. |
+| 8 | Content Launcher (`src/contentLauncher/`, `manifest.toml`) | medium | Partner ID provisório e sem catálogo ingerido; integração gerada pelos documentos do fluxo Content Launcher do ADBT, sem Account Login | O handler só guarda o pedido (`pendingLaunch.ts`); a navegação o abre quando está pronta: card único → Detalhe, ambíguo → tela Buscar. Testar no aparelho com `kcp-cli-v2 content-launcher launch -p com.helloworldtv.app -c '<json>'` e por voz. |
 
 ---
 

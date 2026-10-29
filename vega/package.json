@@ -19,6 +19,7 @@
     "release": "npm-run-all lint test build:app"
   },
   "dependencies": {
+    "@amazon-devices/kepler-media-content-launcher": "~2.0.22",
     "@amazon-devices/kepler-performance-api": "~0.1.4",
     "@amazon-devices/react-native-gesture-handler": "~4.0.0+2.29.0",
     "@amazon-devices/react-native-kepler": "~4.0.0+rn0.83.0",
