@@ -34,6 +34,7 @@
   ],
   "coverageDirectory": ".tmp/coverage",
   "setupFiles": [
-    "./node_modules/@amazon-devices/react-native-gesture-handler/jestSetup.js"
+    "./node_modules/@amazon-devices/react-native-gesture-handler/jestSetup.js",
+    "<rootDir>/test/setup.js"
   ]
 }
