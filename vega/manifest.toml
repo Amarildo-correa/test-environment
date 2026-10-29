@@ -26,6 +26,20 @@ launch-type = "singleton"
 # "kepler.media" é exigida no componente que atende o Content Launcher.
 categories = ["com.amazon.category.main", "com.amazon.category.kepler.media"]
 
+# Deixa o sistema (KCP) entregar ao app os pedidos do Content Launcher.
+[offers]
+[[offers.interaction]]
+id = "com.helloworldtv.app.main"
+
+[[message]]
+uri = "pkg://com.helloworldtv.app.main"
+sender-privileges = ["*"]
+receiver-privileges = ["self"]
+
+[[offers.module]]
+id = "/com.helloworldtv.app.module@IHelloWorldTv1"
+includes-messages = ["pkg://com.helloworldtv.app.main"]
+
 [[extras]]
 key = "interface.provider"
 component-id = "com.helloworldtv.app.main"
