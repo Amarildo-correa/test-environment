@@ -1,5 +1,5 @@
 import 'react-native';
-import { act, render } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
 import * as React from 'react';
 
 import { App } from '../src/App';
@@ -20,11 +20,29 @@ describe('App', () => {
     expect(screen.getByText('Amazon Fire Stick')).toBeTruthy();
     expect(screen.getByText('VEGA OS')).toBeTruthy();
     expect(screen.getByText('World')).toBeTruthy();
+    expect(screen.getByLabelText('Buscar')).toBeTruthy();
     for (const article of articles) {
       expect(
         screen.getByLabelText(`${article.titleStart} ${article.titleEnd}`),
       ).toBeTruthy();
     }
+
+    act(() => jest.runOnlyPendingTimers());
+    screen.unmount();
+  });
+
+  it('busca pelo botão Buscar da Home', () => {
+    const screen = render(<App />);
+    fireEvent.press(screen.getByLabelText('Buscar'));
+    act(() => jest.runOnlyPendingTimers());
+    const input = screen.getByLabelText('Campo de busca');
+    fireEvent.changeText(input, 'área segura');
+    fireEvent(input, 'submitEditing');
+    expect(screen.getByText('Resultados para “área segura”')).toBeTruthy();
+    expect(screen.getByLabelText('Área segura nas bordas da tela')).toBeTruthy();
+    fireEvent.changeText(input, 'futebol');
+    fireEvent(input, 'submitEditing');
+    expect(screen.getByText('Nenhum card encontrado para “futebol”.')).toBeTruthy();
 
     act(() => jest.runOnlyPendingTimers());
     screen.unmount();

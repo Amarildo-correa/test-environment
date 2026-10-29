@@ -10,11 +10,13 @@ import {
 import { createStackNavigator } from '@amazon-devices/react-navigation__stack';
 import { HomeScreen } from './screens/HomeScreen';
 import { DetailScreen } from './screens/DetailScreen';
+import { SearchScreen } from './screens/SearchScreen';
 import { colors } from './theme';
 
 export type RootStackParamList = {
   Home: undefined;
   Detail: { id: string };
+  Search: { query?: string };
 };
 
 // Otimizações recomendadas pela Amazon para a navegação no Vega.
@@ -37,6 +39,7 @@ export function RootNavigator() {
       >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Detail" component={DetailScreen} />
+        <Stack.Screen name="Search" component={SearchScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
