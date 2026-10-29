@@ -8,14 +8,61 @@ export function px(value: number): number {
   return (value * Dimensions.get('window').width) / BASE_WIDTH;
 }
 
+// Identidade visual: tema escuro oficial da Amazon para TV, copiado dos
+// tokens de @amazon-devices/kepler-ui-components 3.2.2 (aliasTokensDark,
+// buttonTokens, cardTokens, textInputTokens, typographyTokens). Os
+// componentes dessa biblioteca estão obsoletos no RN 0.83 e a Amazon manda
+// usar React Native puro, então só os valores do tema são reaproveitados.
 export const colors = {
   background: '#000000',
-  orange: '#FF6A00',
-  white: '#FFFFFF',
-  black: '#000000',
-  divider: '#555555',
-  card: '#404040',
+  surface: '#202225', // fundo de cards e campos
+  primary: '#2D61FF', // destaque e botão principal
+  secondary: '#727477', // botão secundário
+  focus: '#FFFFFF', // borda de foco
+  textHigh: '#FFFFFF',
+  textMedium: '#BEBFC0',
+  placeholder: '#9EA0A2',
+  divider: '#2D3034',
 };
+
+export const fontFamily = 'Amazon Ember';
+
+// Escala tipográfica da Amazon (tamanho e altura de linha, em px de 1080p).
+export const typography = {
+  displayMd: { fontSize: 108, lineHeight: 116 },
+  displaySm: { fontSize: 80, lineHeight: 88 },
+  headlineSm: { fontSize: 36, lineHeight: 44 },
+  titleMd: { fontSize: 32, lineHeight: 40 },
+  bodyLg: { fontSize: 32, lineHeight: 40 },
+  bodyMd: { fontSize: 28, lineHeight: 36 },
+  labelMd: { fontSize: 24, lineHeight: 26 },
+};
+
+export const shapes = {
+  cardRadius: 16,
+  cardFocusBorder: 5,
+  buttonHeight: 84,
+  buttonPadding: 18,
+  buttonRadius: 8,
+  buttonFocusBorder: 3,
+  inputRadius: 5,
+  inputFocusBorder: 2,
+};
+
+// Texto já convertido para a escala da tela, com a fonte da Amazon.
+export function text(
+  size: { fontSize: number; lineHeight: number },
+  color: string = colors.textHigh,
+  fontWeight: '400' | '700' = '400',
+) {
+  return {
+    fontFamily,
+    fontSize: px(size.fontSize),
+    lineHeight: px(size.lineHeight),
+    fontWeight,
+    color,
+  } as const;
+}
 
 // Área segura de ~5% em cada borda.
 export const safeArea = {

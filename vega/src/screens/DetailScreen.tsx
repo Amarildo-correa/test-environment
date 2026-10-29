@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import type { StackScreenProps } from '@amazon-devices/react-navigation__stack';
-import { Focusable } from '../focus';
+import { Button } from '../components/Button';
 import { getArticle } from '../content/articles';
-import { colors, px, safeArea } from '../theme';
+import { colors, px, safeArea, text, typography } from '../theme';
 import type { RootStackParamList } from '../navigation';
 
 type Props = StackScreenProps<RootStackParamList, 'Detail'>;
@@ -16,24 +16,12 @@ export function DetailScreen({ navigation, route }: Props) {
 
   return (
     <View style={styles.screen}>
-      <Focusable
-        hasTVPreferredFocus
-        onPress={goBack}
-        style={styles.backButton}
-        focusedStyle={styles.backButtonFocused}
-        accessibilityRole="button"
-      >
-        {focused => (
-          <Text style={focused ? styles.backTextFocused : styles.backText}>
-            ‹ Voltar
-          </Text>
-        )}
-      </Focusable>
+      <Button label="‹ Voltar" onPress={goBack} hasTVPreferredFocus />
 
       {article ? (
         <>
-          <Text style={styles.titleOrange}>{article.titleStart}</Text>
-          <Text style={styles.titleWhite}>{article.titleEnd}</Text>
+          <Text style={styles.titleAccent}>{article.titleStart}</Text>
+          <Text style={styles.title}>{article.titleEnd}</Text>
           <View style={styles.divider} />
           <Text style={styles.body}>{article.body}</Text>
         </>
@@ -44,17 +32,6 @@ export function DetailScreen({ navigation, route }: Props) {
   );
 }
 
-const title = {
-  fontSize: px(96),
-  fontWeight: 'bold',
-  lineHeight: px(112),
-} as const;
-const backText = {
-  color: colors.black,
-  fontSize: px(36),
-  fontWeight: 'bold',
-} as const;
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -62,32 +39,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: safeArea.horizontal,
     paddingVertical: safeArea.vertical,
   },
-  backButton: {
-    alignSelf: 'flex-start',
-    backgroundColor: colors.white,
-    paddingVertical: px(16),
-    paddingHorizontal: px(40),
-    borderWidth: px(6),
-    borderColor: colors.white,
-    marginBottom: px(56),
+  titleAccent: {
+    ...text(typography.displaySm, colors.primary, '700'),
+    marginTop: px(56),
   },
-  backButtonFocused: {
-    borderColor: colors.orange,
-    transform: [{ scale: 1.08 }],
-  },
-  backText,
-  backTextFocused: { ...backText, textDecorationLine: 'underline' },
-  titleOrange: { ...title, color: colors.orange },
-  titleWhite: { ...title, color: colors.white },
+  title: text(typography.displaySm, colors.textHigh, '700'),
   divider: {
     height: px(2),
     backgroundColor: colors.divider,
     marginVertical: px(40),
   },
   body: {
-    color: colors.white,
-    fontSize: px(40),
-    lineHeight: px(64),
+    ...text(typography.bodyLg, colors.textMedium),
     maxWidth: px(1500),
   },
 });

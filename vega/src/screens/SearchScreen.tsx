@@ -3,7 +3,14 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import type { StackScreenProps } from '@amazon-devices/react-navigation__stack';
 import { searchArticles } from '../content/search';
 import { ArticleCard, CARD_GAP } from '../components/ArticleCard';
-import { colors, px, safeArea } from '../theme';
+import {
+  colors,
+  px,
+  safeArea,
+  shapes,
+  text,
+  typography,
+} from '../theme';
 import type { RootStackParamList } from '../navigation';
 
 type Props = StackScreenProps<RootStackParamList, 'Search'>;
@@ -33,7 +40,7 @@ export function SearchScreen({ navigation, route }: Props) {
         onChangeText={setText}
         onSubmitEditing={submit}
         placeholder="Digite o nome de um card"
-        placeholderTextColor={colors.divider}
+        placeholderTextColor={colors.placeholder}
         returnKeyType="search"
         hasTVPreferredFocus={results.length === 0}
         onFocus={handleInputFocus}
@@ -64,11 +71,14 @@ export function SearchScreen({ navigation, route }: Props) {
   );
 }
 
+// Campo no padrão do TextInput da Amazon: superfície escura, cantos de 5 e
+// borda branca no foco.
 const input = {
-  color: colors.white,
-  fontSize: px(40),
-  borderWidth: px(4),
-  borderColor: colors.divider,
+  ...text(typography.bodyMd),
+  backgroundColor: colors.surface,
+  borderRadius: px(shapes.inputRadius),
+  borderWidth: px(shapes.inputFocusBorder),
+  borderColor: 'transparent',
   paddingVertical: px(16),
   paddingHorizontal: px(28),
 } as const;
@@ -81,17 +91,14 @@ const styles = StyleSheet.create({
     paddingVertical: safeArea.vertical,
   },
   title: {
-    color: colors.orange,
-    fontSize: px(72),
-    fontWeight: 'bold',
+    ...text(typography.displaySm, colors.primary, '700'),
     marginBottom: px(24),
   },
   input,
   // Borda branca mostra que o campo tem o foco; OK abre o teclado.
-  inputFocused: { ...input, borderColor: colors.white },
+  inputFocused: { ...input, borderColor: colors.focus },
   summary: {
-    color: colors.white,
-    fontSize: px(36),
+    ...text(typography.titleMd, colors.textMedium),
     marginTop: px(30),
   },
   grid: {

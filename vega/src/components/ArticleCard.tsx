@@ -2,7 +2,7 @@ import React, { memo, useCallback, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Focusable } from '../focus';
 import type { Article } from '../content/articles';
-import { colors, px } from '../theme';
+import { colors, px, shapes, text, typography } from '../theme';
 
 type ArticleCardProps = {
   article: Article;
@@ -13,7 +13,9 @@ type ArticleCardProps = {
   onFocusArticle?: (id: string) => void;
 };
 
-// Card memoizado com handlers estáveis (lista anti-padrões do porte para Vega).
+// Card memoizado com handlers estáveis (lista anti-padrões do porte para Vega),
+// no visual do Card da Amazon: superfície escura, cantos arredondados e borda
+// branca no foco.
 export const ArticleCard = memo(function ArticleCard({
   article,
   preferred,
@@ -61,25 +63,19 @@ const styles = StyleSheet.create({
   card: {
     width: '31.5%',
     height: '46%',
-    backgroundColor: colors.card,
+    backgroundColor: colors.surface,
+    borderRadius: px(shapes.cardRadius),
     padding: px(32),
     // A borda existe sempre (transparente) para o foco não deslocar o layout.
-    borderWidth: px(8),
+    borderWidth: px(shapes.cardFocusBorder),
     borderColor: 'transparent',
   },
   cardFocused: {
-    borderColor: colors.white,
-    transform: [{ scale: 1.05 }],
+    borderColor: colors.focus,
   },
   cardTitle: {
-    color: colors.white,
-    fontSize: px(38),
-    fontWeight: 'bold',
-    marginBottom: px(16),
+    ...text(typography.titleMd, colors.textHigh, '700'),
+    marginBottom: px(12),
   },
-  cardBody: {
-    color: colors.white,
-    fontSize: px(30),
-    lineHeight: px(42),
-  },
+  cardBody: text(typography.bodyMd, colors.textMedium),
 });

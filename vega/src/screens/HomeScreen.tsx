@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import type { StackScreenProps } from '@amazon-devices/react-navigation__stack';
-import { Focusable, useFocusRestore } from '../focus';
+import { useFocusRestore } from '../focus';
 import { articles } from '../content/articles';
 import { ArticleCard, CARD_GAP } from '../components/ArticleCard';
-import { colors, px, safeArea } from '../theme';
+import { Button } from '../components/Button';
+import { colors, px, safeArea, text, typography } from '../theme';
 import type { RootStackParamList } from '../navigation';
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
@@ -25,19 +26,7 @@ export function HomeScreen({ navigation }: Props) {
       <View style={styles.header}>
         <Text style={styles.headerBrand}>Amazon Fire Stick</Text>
         <View style={styles.headerRight}>
-          <Focusable
-            onPress={openSearch}
-            style={styles.searchButton}
-            focusedStyle={styles.searchButtonFocused}
-            accessibilityRole="button"
-            accessibilityLabel="Buscar"
-          >
-            {focused => (
-              <Text style={focused ? styles.searchTextFocused : styles.searchText}>
-                Buscar
-              </Text>
-            )}
-          </Focusable>
+          <Button label="Buscar" variant="secondary" onPress={openSearch} />
           <Text style={styles.headerOs}>VEGA OS</Text>
         </View>
       </View>
@@ -46,8 +35,8 @@ export function HomeScreen({ navigation }: Props) {
       {/* Dois Text lado a lado: o template do Vega avisa que Text aninhado
           ainda não funciona. */}
       <View style={styles.titleRow}>
-        <Text style={styles.titleOrange}>Hello </Text>
-        <Text style={styles.titleWhite}>World</Text>
+        <Text style={styles.titleAccent}>Hello </Text>
+        <Text style={styles.title}>World</Text>
       </View>
 
       <View style={styles.grid}>
@@ -66,13 +55,6 @@ export function HomeScreen({ navigation }: Props) {
   );
 }
 
-const title = { fontSize: px(110), fontWeight: 'bold' } as const;
-const searchText = {
-  color: colors.white,
-  fontSize: px(30),
-  fontWeight: 'bold',
-} as const;
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -90,29 +72,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     columnGap: px(40),
   },
-  headerBrand: {
-    color: colors.orange,
-    fontSize: px(36),
-    fontWeight: '600',
-  },
+  headerBrand: text(typography.headlineSm, colors.primary, '700'),
   headerOs: {
-    color: colors.white,
-    fontSize: px(36),
-    fontWeight: 'bold',
+    ...text(typography.headlineSm, colors.textHigh, '700'),
     letterSpacing: px(4),
   },
-  searchButton: {
-    paddingVertical: px(8),
-    paddingHorizontal: px(28),
-    borderWidth: px(4),
-    borderColor: colors.divider,
-  },
-  searchButtonFocused: {
-    borderColor: colors.white,
-    backgroundColor: colors.white,
-  },
-  searchText,
-  searchTextFocused: { ...searchText, color: colors.black },
   divider: {
     height: px(2),
     backgroundColor: colors.divider,
@@ -120,11 +84,11 @@ const styles = StyleSheet.create({
   },
   titleRow: {
     flexDirection: 'row',
-    marginTop: px(30),
-    marginBottom: px(30),
+    marginTop: px(24),
+    marginBottom: px(24),
   },
-  titleOrange: { ...title, color: colors.orange },
-  titleWhite: { ...title, color: colors.white },
+  titleAccent: text(typography.displayMd, colors.primary, '700'),
+  title: text(typography.displayMd, colors.textHigh, '700'),
   grid: {
     flex: 1,
     flexDirection: 'row',
