@@ -13,10 +13,13 @@ export function px(value: number): number {
 // buttonTokens, cardTokens, textInputTokens, typographyTokens). Os
 // componentes dessa biblioteca estão obsoletos no RN 0.83 e a Amazon manda
 // usar React Native puro, então só os valores do tema são reaproveitados.
+// Exceção: o destaque usa o ciano do logo Alexa+ no lugar do azul #2D61FF
+// do tema, que tem contraste baixo no fundo preto (~4,3:1 contra ~12,4:1).
 export const colors = {
   background: '#000000',
   surface: '#202225', // fundo de cards e campos
-  primary: '#2D61FF', // destaque e botão principal
+  primary: '#3FD8F8', // destaque e botão principal (ciano do logo Alexa+)
+  onPrimary: '#000000', // texto sobre o ciano; branco teria só ~1,7:1
   secondary: '#727477', // botão secundário
   focus: '#FFFFFF', // borda de foco
   textHigh: '#FFFFFF',

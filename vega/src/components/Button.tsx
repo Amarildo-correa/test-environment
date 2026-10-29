@@ -6,14 +6,15 @@ import { colors, px, shapes, text, typography } from '../theme';
 type ButtonProps = {
   label: string;
   onPress: () => void;
-  // primary: azul da Amazon; secondary: cinza.
+  // primary: ciano do logo Alexa+; secondary: cinza.
   variant?: 'primary' | 'secondary';
   hasTVPreferredFocus?: boolean;
 };
 
 // Botão no padrão do tema da Amazon (Button "contained" da
 // kepler-ui-components), montado com Pressable como manda o guia de
-// migração do RN 0.83: fundo da variante e borda branca no foco.
+// migração do RN 0.83: fundo da variante e borda branca no foco. No
+// primário (ciano) o rótulo é preto, para manter o contraste.
 export const Button = forwardRef<View, ButtonProps>(function ButtonImpl(
   { label, onPress, variant = 'primary', hasTVPreferredFocus },
   ref,
@@ -28,7 +29,9 @@ export const Button = forwardRef<View, ButtonProps>(function ButtonImpl(
       accessibilityRole="button"
       accessibilityLabel={label}
     >
-      <Text style={styles.label}>{label}</Text>
+      <Text style={variant === 'primary' ? styles.labelPrimary : styles.label}>
+        {label}
+      </Text>
     </Focusable>
   );
 });
@@ -49,4 +52,5 @@ const styles = StyleSheet.create({
   secondary: { ...base, backgroundColor: colors.secondary },
   focused: { borderColor: colors.focus },
   label: text(typography.labelMd, colors.textHigh, '700'),
+  labelPrimary: text(typography.labelMd, colors.onPrimary, '700'),
 });
