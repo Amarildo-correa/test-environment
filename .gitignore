@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+
+# Binários de build ficam fora do git (ficam em release/ localmente e
+# como artefatos do GitHub Actions).
+release/*.apk
+release/*.aab
+release/*.vpkg
+*.vpkg

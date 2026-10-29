@@ -1,0 +1,8 @@
+{
+  "platform": {
+    "default": "fire_os",
+    "paths": {
+      "vega/": "vega_os"
+    }
+  }
+}
