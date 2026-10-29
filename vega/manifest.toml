@@ -30,6 +30,11 @@ id = "com.amazon.audio.stream"
 [[wants.service]]
 id = "com.amazon.audio.control"
 
+# Sons do sistema: o UISoundManager do runtime e a consulta
+# areSystemSoundsEnabledAsync dependem deste serviço.
+[[wants.service]]
+id = "com.amazon.audio.system"
+
 [components]
 [[components.interactive]]
 id = "com.helloworldtv.app.main"
