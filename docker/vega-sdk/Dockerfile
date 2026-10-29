@@ -27,8 +27,8 @@ RUN vega -v
 # Camada 2: o SDK, em separado e com novas tentativas, porque o download é
 # grande e a conexão com o servidor da Amazon pode cair no meio.
 # O Dockerfile oficial cita 0.24.9311, que não está mais disponível
-# (`vega sdk list-remote` em 2026-10-29 lista 0.24.9785 como a mais nova).
-ARG VEGA_SDK_VERSION=0.24.9785
+# (`vega sdk list-remote` em 2026-10-29 lista 0.24.12112 como a mais nova).
+ARG VEGA_SDK_VERSION=0.24.12112
 ENV VEGA_SDK_VERSION=${VEGA_SDK_VERSION}
 RUN for attempt in 1 2 3 4 5; do \
       vega sdk install "${VEGA_SDK_VERSION}" && break; \
