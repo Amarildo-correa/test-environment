@@ -14,24 +14,13 @@ target = "1.2"
 [[needs.module]]
 id = "/com.amazon.vega.os@IVega_1_2"
 
-# Exigido pela keplerscript-audio-lib (sons de navegação).
-[[needs.privilege]]
-id = "com.amazon.audio.privilege.settings.control"
-
 # Teclado virtual do sistema para o campo da tela Buscar.
 [wants]
 [[wants.service]]
 id = "com.amazon.inputmethod.service"
 
-# Sons de navegação (AudioPlaybackStream da keplerscript-audio-lib).
-[[wants.service]]
-id = "com.amazon.audio.stream"
-
-[[wants.service]]
-id = "com.amazon.audio.control"
-
-# Sons do sistema: o UISoundManager do runtime e a consulta
-# areSystemSoundsEnabledAsync dependem deste serviço.
+# Sons de navegação nativos do Fire TV: o UISoundManager do runtime toca os
+# sons de foco, OK e Voltar, mas só com acesso a este serviço.
 [[wants.service]]
 id = "com.amazon.audio.system"
 
