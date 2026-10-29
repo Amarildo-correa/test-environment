@@ -1,0 +1,69 @@
+# Gera um projeto React Native for Vega a partir de um template oficial do
+# Vega SDK e publica o resultado como artefato. Existe porque o Vega SDK não
+# roda oficialmente no Windows/WSL; o runner Ubuntu do GitHub é suportado.
+name: Vega scaffold
+
+on:
+  workflow_dispatch:
+    inputs:
+      template:
+        description: Template do Vega CLI
+        default: helloWorld
+      app_name:
+        description: Nome do app (sem espaços)
+        default: HelloTv
+      package_id:
+        description: Package ID
+        default: com.helloworldtv.app
+
+env:
+  VEGA_SDK_VERSION: 0.24.9785
+
+jobs:
+  scaffold:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar Vega CLI e SDK
+        env:
+          NONINTERACTIVE: "true"
+          SKIP_VVD_INSTALL: "true"
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq jq lz4
+          curl -fsSL https://sdk-installer.vega.labcollab.net/get_vvm.sh | bash
+          echo "$HOME/vega/bin" >> "$GITHUB_PATH"
+
+      - name: Gerar projeto
+        env:
+          TEMPLATE: ${{ inputs.template }}
+          APP_NAME: ${{ inputs.app_name }}
+          PACKAGE_ID: ${{ inputs.package_id }}
+        run: |
+          mkdir -p out
+          vega -v | tee out/vega-version.txt
+          vega sdk list-installed | tee -a out/vega-version.txt
+          vega project list-templates | tee out/templates.txt
+          vega project generate --template "$TEMPLATE" --name "$APP_NAME" \
+            --packageId "$PACKAGE_ID" --outputDir "out/$APP_NAME"
+
+      # Ajuda dos comandos usados no porte, para consulta fora do runner.
+      - name: Salvar ajuda da CLI
+        run: |
+          {
+            for cmd in "" "project" "project generate" "project install" \
+                       "project doctor" "project update-manifest" "build" \
+                       "device" "device install-app" "exec vpt"; do
+              echo "===== vega $cmd --help"
+              vega $cmd --help 2>&1 || true
+            done
+          } > out/cli-help.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vega-scaffold
+          path: out/
+          include-hidden-files: true
