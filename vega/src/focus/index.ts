@@ -4,3 +4,4 @@
 export { Focusable } from './Focusable';
 export type { FocusableProps } from './Focusable';
 export { useFocusRestore } from './useFocusRestore';
+export { useSelectKeyTracking } from './selectKey';

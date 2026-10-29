@@ -15,13 +15,19 @@ export function px(value: number): number {
 // usar React Native puro, então só os valores do tema são reaproveitados.
 // Exceção: o destaque usa o ciano do logo Alexa+ no lugar do azul #2D61FF
 // do tema, que tem contraste baixo no fundo preto (~4,3:1 contra ~12,4:1).
+//
+// Fundo e superfícies em cinza-escuro, não em preto puro (preto total borra
+// em OLED e cria halo em LCD). Contrastes WCAG medidos para TV (texto ≥ 4,5:1,
+// principal ≥ 7:1): branco/fundo 18,4; ciano/fundo 10,9; branco/card 13,3;
+// texto médio/card 7,2; placeholder/campo 5,1; branco/botão secundário 7,0;
+// preto/botão primário 12,4.
 export const colors = {
-  background: '#000000',
-  surface: '#202225', // fundo de cards e campos
-  overlay: '#191A1D', // fundo de painéis sobre a tela
+  background: '#131416', // cinza 900 da paleta da Amazon
+  surface: '#2D3034', // cards e campos ("surface" do tema da Amazon)
+  overlay: '#202225', // painéis sobre a tela
   primary: '#3FD8F8', // destaque e botão principal (ciano do logo Alexa+)
   onPrimary: '#000000', // texto sobre o ciano; branco teria só ~1,7:1
-  secondary: '#727477', // botão secundário
+  secondary: '#57595D', // botão secundário (cinza 400)
   focus: '#FFFFFF', // borda de foco
   textHigh: '#FFFFFF',
   textMedium: '#BEBFC0',

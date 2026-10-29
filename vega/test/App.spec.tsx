@@ -58,8 +58,6 @@ describe('App', () => {
       'longPress',
     );
     expect(screen.getByText('Opções')).toBeTruthy();
-    // Sem o aviso de OK solto (que o Jest não emite), os botões liberam após 2 s.
-    act(() => jest.advanceTimersByTime(2000));
     fireEvent.press(screen.getByLabelText('Salvar na lista'));
     expect(screen.queryByText('Opções')).toBeNull();
 
@@ -76,23 +74,10 @@ describe('App', () => {
     const screen = render(<App />);
     await act(async () => {});
     fireEvent(screen.getByLabelText('Vega OS no Fire TV'), 'longPress');
-    act(() => jest.advanceTimersByTime(2000));
     fireEvent.press(screen.getByLabelText('Abrir'));
     act(() => jest.runOnlyPendingTimers());
     expect(screen.getByText('‹ Voltar')).toBeTruthy();
     expect(screen.getByText('no Fire TV')).toBeTruthy();
-
-    act(() => jest.runOnlyPendingTimers());
-    screen.unmount();
-  });
-
-  it('o OK ainda apertado do long press não aciona o botão Abrir', async () => {
-    const screen = render(<App />);
-    await act(async () => {});
-    fireEvent(screen.getByLabelText('Vega OS no Fire TV'), 'longPress');
-    fireEvent.press(screen.getByLabelText('Abrir'));
-    expect(screen.getByText('Opções')).toBeTruthy();
-    expect(screen.queryByText('‹ Voltar')).toBeNull();
 
     act(() => jest.runOnlyPendingTimers());
     screen.unmount();

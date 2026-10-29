@@ -4,9 +4,11 @@ import { GestureHandlerRootView } from '@amazon-devices/react-native-gesture-han
 import { SafeAreaProvider } from '@amazon-devices/react-native-safe-area-context';
 import { useLaunchMetrics } from './launch';
 import { RootNavigator } from './navigation';
+import { useSelectKeyTracking } from './focus';
 
 export const App = () => {
   useLaunchMetrics();
+  useSelectKeyTracking();
 
   // O stack navigator do Vega depende do react-native-gesture-handler, que
   // precisa envolver a árvore de navegação.
