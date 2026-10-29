@@ -38,6 +38,7 @@ export const Focusable = forwardRef<View, FocusableProps>(function FocusableImpl
   ref,
 ) {
   const [focused, setFocused] = useState(false);
+  const [pressed, setPressed] = useState(false);
   const handleFocus = useCallback(
     (event: FocusEventArg) => {
       setFocused(true);
@@ -48,11 +49,13 @@ export const Focusable = forwardRef<View, FocusableProps>(function FocusableImpl
   const handleBlur = useCallback(
     (event: BlurEventArg) => {
       setFocused(false);
+      // Ao perder o foco (ex.: navegação no meio de um long press), o
+      // onPressOut pode não chegar; desfaz o estado de pressionado.
+      setPressed(false);
       onBlur?.(event);
     },
     [onBlur],
   );
-  const [pressed, setPressed] = useState(false);
   const handlePressIn = useCallback(
     (event: PressEventArg) => {
       setPressed(true);

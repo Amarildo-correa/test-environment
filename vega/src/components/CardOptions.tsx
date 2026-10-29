@@ -30,18 +30,60 @@ export function useCardOptions({
 }: Options) {
   const [openId, setOpenId] = useState<string | undefined>();
   const wasOpen = useRef(false);
+  // Aberto por long press, o OK ainda está apertado: o soltar (e as
+  // repetições da tecla) cairia no botão "Abrir", que recebe o foco. Os
+  // botões só aceitam OK depois que o sistema avisa que a tecla foi solta.
+  const ready = useRef(true);
+  const readyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const open = useCallback((id: string) => setOpenId(id), []);
+  const cancelArm = useCallback(() => {
+    if (readyTimer.current !== null) {
+      clearTimeout(readyTimer.current);
+      readyTimer.current = null;
+    }
+  }, []);
+
+  const arm = useCallback((delayMs: number) => {
+    cancelArm();
+    readyTimer.current = setTimeout(() => {
+      ready.current = true;
+    }, delayMs);
+  }, [cancelArm]);
+
+  const open = useCallback(
+    (id: string) => {
+      ready.current = false;
+      // Rede de segurança caso o aviso de tecla solta não chegue.
+      arm(2000);
+      setOpenId(id);
+    },
+    [arm],
+  );
   const close = useCallback(() => setOpenId(undefined), []);
+  const canAct = useCallback(() => ready.current, []);
 
-  // Botão Menu: abre ao soltar a tecla (eventKeyAction 1), uma vez só.
+  useEffect(() => cancelArm, [cancelArm]);
+
   useTVEventHandler((event: HWEvent) => {
+    // OK solto depois do long press: libera os botões logo em seguida (o
+    // próprio soltar ainda chega ao botão e precisa ser ignorado).
+    if (
+      event.eventType === 'select' &&
+      event.eventKeyAction === 1 &&
+      !ready.current
+    ) {
+      arm(200);
+      return;
+    }
+    // Botão Menu: abre ao soltar a tecla (eventKeyAction 1), uma vez só.
     if (
       event.eventType === 'menu' &&
       event.eventKeyAction === 1 &&
       openId === undefined &&
       isScreenFocused()
     ) {
+      cancelArm();
+      ready.current = true;
       setOpenId(lastKey());
     }
   });
@@ -70,15 +112,20 @@ export function useCardOptions({
   }, [openId, focusLast]);
 
   const handleOpen = useCallback(() => {
-    if (openId) {
+    if (openId && canAct()) {
       close();
       onOpenArticle(openId);
     }
-  }, [openId, close, onOpenArticle]);
+  }, [openId, canAct, close, onOpenArticle]);
 
   const panel =
     openId === undefined ? null : (
-      <CardOptionsPanel id={openId} onOpen={handleOpen} onClose={close} />
+      <CardOptionsPanel
+        id={openId}
+        canAct={canAct}
+        onOpen={handleOpen}
+        onClose={close}
+      />
     );
 
   return { open, panel };
@@ -86,18 +133,22 @@ export function useCardOptions({
 
 type PanelProps = {
   id: string;
+  canAct: () => boolean;
   onOpen: () => void;
   onClose: () => void;
 };
 
-function CardOptionsPanel({ id, onOpen, onClose }: PanelProps) {
+function CardOptionsPanel({ id, canAct, onOpen, onClose }: PanelProps) {
   const article = getArticle(id);
   const { isSaved } = useMyList();
   const saved = isSaved(id);
   const handleToggle = useCallback(() => {
+    if (!canAct()) {
+      return;
+    }
     toggleSaved(id);
     onClose();
-  }, [id, onClose]);
+  }, [id, canAct, onClose]);
 
   return (
     <View style={styles.overlay}>
