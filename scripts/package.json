@@ -1,0 +1,9 @@
+{
+  "name": "hellotv-scripts",
+  "private": true,
+  "description": "Scripts auxiliares (geração de assets da TV e da loja).",
+  "type": "module",
+  "devDependencies": {
+    "sharp": "^0.35.5"
+  }
+}
