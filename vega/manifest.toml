@@ -19,6 +19,13 @@ id = "/com.amazon.vega.os@IVega_1_2"
 [[wants.service]]
 id = "com.amazon.inputmethod.service"
 
+# Sons de navegação (AudioPlaybackStream da keplerscript-audio-lib).
+[[wants.service]]
+id = "com.amazon.audio.stream"
+
+[[wants.service]]
+id = "com.amazon.audio.control"
+
 [components]
 [[components.interactive]]
 id = "com.helloworldtv.app.main"

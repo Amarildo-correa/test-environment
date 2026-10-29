@@ -8,6 +8,8 @@ import { articles } from '../src/content/articles';
 // Os hooks de splash e TTFD só funcionam no aparelho: no Jest, o
 // react-native-kepler referencia `Platform` sem importá-lo e quebra.
 jest.mock('../src/launch', () => ({ useLaunchMetrics: jest.fn() }));
+// O áudio só existe no aparelho.
+jest.mock('../src/sounds/useUiSounds', () => ({ useUiSounds: jest.fn() }));
 
 // O stack navigator agenda animações com timers; com timers falsos e a
 // desmontagem no fim, nada roda depois que o ambiente de teste fecha.
