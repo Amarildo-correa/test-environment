@@ -58,3 +58,24 @@ Este teste usou só builds de release (o JavaScript vai dentro do APK). Para o m
 
 - **Internet lenta (~100 KB/s):** o download do NDK pelo Gradle travou em 380 MB; ele foi baixado com `curl -C -` (retoma de onde parou) e extraído à mão. Ao extrair com `zipfile` do Python, os links simbólicos viram arquivos de texto; foi preciso recriá-los (35 links, incluindo o `clang`).
 - **Vega SDK:** o download do SDK caiu duas vezes dentro do Docker local pela mesma lentidão. Por isso o SDK roda no GitHub Actions.
+
+## Instalar no Fire Stick físico (modo desenvolvedor) — testado em 2026-10-29
+
+Aparelho: Fire TV Stick HD (2ª geração), Vega OS 2.0, IP 192.168.1.2 (mesma rede do notebook, mesmo com Wi-Fi 5 GHz × 2,4 GHz).
+
+O Vega SDK roda num container Docker persistente (`vega-sdk-dl`, Ubuntu 22.04) com o SDK num volume (`vega-home`):
+
+```bash
+docker start vega-sdk-dl                      # se o container estiver parado
+V='docker exec vega-sdk-dl bash -c'
+$V 'source /root/vega/dbus.env; export PATH=/root/vega/bin:$PATH; vega exec vda connect 192.168.1.2:5555'
+docker cp release/HelloWorldTV.vpkg vega-sdk-dl:/root/HelloWorldTV.vpkg
+$V 'export PATH=/root/vega/bin:$PATH; vega device install-app --packagePath /root/HelloWorldTV.vpkg && vega device launch-app --appName com.helloworldtv.app.main'
+```
+
+Ativação do modo desenvolvedor (uma vez por aparelho):
+1. `vega devmode login` usa autorização por código (URL `amazon.com/us/code` + código); aprovar no navegador do Windows. O token vai para o chaveiro do Linux: o container precisa de `dbus-x11`, `gnome-keyring` e de uma sessão dbus com o chaveiro destravado (`/root/vega/dbus.env`). Sem isso a CLI falha com `dbus-launch: executable file not found`.
+2. No Fire Stick: Configurações > Minha Fire TV > Sobre > 7× OK no nome do aparelho > Opções do desenvolvedor > Modo desenvolvedor > Continuar → código de 6 caracteres (vale 5 minutos).
+3. `vega devmode enable-device --code <código>` → o aparelho reinicia; a porta 5555 abre cerca de 2 minutos depois.
+
+A verificação de identidade pendente na conta Amazon Developer não bloqueou o modo desenvolvedor.
