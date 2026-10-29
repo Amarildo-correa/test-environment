@@ -1,5 +1,6 @@
 // Gera o banner e os ícones do app (Android TV e Vega) e as imagens da loja
 // a partir de SVG. Uso: cd scripts && node make-assets.mjs
+import { execFileSync } from 'node:child_process';
 import { mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -63,7 +64,23 @@ await render(squareSvg(114), 'release/assets/icon-114x114.png');
 await render(wideSvg(1280, 720), 'release/assets/firetv-icon-1280x720.png');
 await render(wideSvg(1920, 1080, { tagline: false }), 'release/assets/firetv-background-1920x1080.png');
 
-// Ícone do app Vega (manifest.toml → assets/image/app_icon.png), se o projeto já existir.
+// App Vega, se o projeto já existir: ícone (manifest.toml → assets/image/app_icon.png)
+// e tela de abertura estática em assets/raw/SplashScreenImages.zip, no formato
+// _loop/loop00000.png + desc.txt ("<largura> <altura> <fps>" / "c 0 0 _loop").
 if (existsSync(join(root, 'vega'))) {
   await render(squareSvg(512), 'vega/assets/image/app_icon.png');
+
+  const splash = await sharp(Buffer.from(wideSvg(1920, 1080, { tagline: false })))
+    .flatten({ background: BLACK })
+    .png()
+    .toBuffer();
+  const zipPath = join(root, 'vega/assets/raw/SplashScreenImages.zip');
+  mkdirSync(dirname(zipPath), { recursive: true });
+  execFileSync('python3', ['-c', `
+import sys, zipfile
+with zipfile.ZipFile(sys.argv[1], 'w', zipfile.ZIP_DEFLATED) as z:
+    z.writestr('_loop/loop00000.png', sys.stdin.buffer.read())
+    z.writestr('desc.txt', '1920 1080 30\\nc 0 0 _loop\\n')
+`, zipPath], { input: splash });
+  console.log('ok', 'vega/assets/raw/SplashScreenImages.zip');
 }
