@@ -9,11 +9,14 @@ import {
 
 type FocusEventArg = Parameters<NonNullable<PressableProps['onFocus']>>[0];
 type BlurEventArg = Parameters<NonNullable<PressableProps['onBlur']>>[0];
+type PressEventArg = Parameters<NonNullable<PressableProps['onPressIn']>>[0];
 
 export type FocusableProps = Omit<PressableProps, 'style' | 'children'> & {
   style?: StyleProp<ViewStyle>;
   // Estilo aplicado por cima de `style` enquanto o elemento tem o foco.
   focusedStyle?: StyleProp<ViewStyle>;
+  // Estilo enquanto o OK está apertado (inclusive segurando para o long press).
+  pressedStyle?: StyleProp<ViewStyle>;
   // Recebe o estado de foco para que o conteúdo também possa mudar.
   children?: React.ReactNode | ((focused: boolean) => React.ReactNode);
 };
@@ -21,7 +24,17 @@ export type FocusableProps = Omit<PressableProps, 'style' | 'children'> & {
 // Elemento selecionável pelo D-pad: OK dispara onPress e o estado de foco
 // fica disponível para o estilo e para os filhos.
 export const Focusable = forwardRef<View, FocusableProps>(function FocusableImpl(
-  { style, focusedStyle, children, onFocus, onBlur, ...rest },
+  {
+    style,
+    focusedStyle,
+    pressedStyle,
+    children,
+    onFocus,
+    onBlur,
+    onPressIn,
+    onPressOut,
+    ...rest
+  },
   ref,
 ) {
   const [focused, setFocused] = useState(false);
@@ -39,9 +52,24 @@ export const Focusable = forwardRef<View, FocusableProps>(function FocusableImpl
     },
     [onBlur],
   );
+  const [pressed, setPressed] = useState(false);
+  const handlePressIn = useCallback(
+    (event: PressEventArg) => {
+      setPressed(true);
+      onPressIn?.(event);
+    },
+    [onPressIn],
+  );
+  const handlePressOut = useCallback(
+    (event: PressEventArg) => {
+      setPressed(false);
+      onPressOut?.(event);
+    },
+    [onPressOut],
+  );
   const pressableStyle = useMemo(
-    () => (focused ? [style, focusedStyle] : style),
-    [focused, style, focusedStyle],
+    () => [style, focused && focusedStyle, pressed && pressedStyle],
+    [focused, pressed, style, focusedStyle, pressedStyle],
   );
 
   return (
@@ -50,6 +78,8 @@ export const Focusable = forwardRef<View, FocusableProps>(function FocusableImpl
       focusable
       onFocus={handleFocus}
       onBlur={handleBlur}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       style={pressableStyle}
       {...rest}
     >

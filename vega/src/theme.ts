@@ -18,6 +18,7 @@ export function px(value: number): number {
 export const colors = {
   background: '#000000',
   surface: '#202225', // fundo de cards e campos
+  overlay: '#191A1D', // fundo de painéis sobre a tela
   primary: '#3FD8F8', // destaque e botão principal (ciano do logo Alexa+)
   onPrimary: '#000000', // texto sobre o ciano; branco teria só ~1,7:1
   secondary: '#727477', // botão secundário

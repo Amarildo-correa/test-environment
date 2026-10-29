@@ -21,6 +21,7 @@ describe('App', () => {
     expect(screen.getByText('VEGA OS')).toBeTruthy();
     expect(screen.getByText('World')).toBeTruthy();
     expect(screen.getByLabelText('Buscar')).toBeTruthy();
+    expect(screen.getByLabelText('Minha lista')).toBeTruthy();
     for (const article of articles) {
       expect(
         screen.getByLabelText(`${article.titleStart} ${article.titleEnd}`),
@@ -43,6 +44,40 @@ describe('App', () => {
     fireEvent.changeText(input, 'futebol');
     fireEvent(input, 'submitEditing');
     expect(screen.getByText('Nenhum card encontrado para “futebol”.')).toBeTruthy();
+
+    act(() => jest.runOnlyPendingTimers());
+    screen.unmount();
+  });
+
+  it('segurar OK no card abre as opções e salva na Minha lista', async () => {
+    const screen = render(<App />);
+    await act(async () => {});
+
+    fireEvent(
+      screen.getByLabelText('Área segura nas bordas da tela'),
+      'longPress',
+    );
+    expect(screen.getByText('Opções')).toBeTruthy();
+    fireEvent.press(screen.getByLabelText('Salvar na lista'));
+    expect(screen.queryByText('Opções')).toBeNull();
+
+    fireEvent.press(screen.getByLabelText('Minha lista'));
+    act(() => jest.runOnlyPendingTimers());
+    expect(screen.queryByText(/Sua lista está vazia/)).toBeNull();
+    expect(screen.getByLabelText('Área segura nas bordas da tela')).toBeTruthy();
+
+    act(() => jest.runOnlyPendingTimers());
+    screen.unmount();
+  });
+
+  it('a opção Abrir leva ao detalhe do card', async () => {
+    const screen = render(<App />);
+    await act(async () => {});
+    fireEvent(screen.getByLabelText('Vega OS no Fire TV'), 'longPress');
+    fireEvent.press(screen.getByLabelText('Abrir'));
+    act(() => jest.runOnlyPendingTimers());
+    expect(screen.getByText('‹ Voltar')).toBeTruthy();
+    expect(screen.getByText('no Fire TV')).toBeTruthy();
 
     act(() => jest.runOnlyPendingTimers());
     screen.unmount();

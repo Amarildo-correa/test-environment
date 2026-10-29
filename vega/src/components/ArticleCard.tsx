@@ -8,6 +8,8 @@ type ArticleCardProps = {
   article: Article;
   preferred: boolean;
   onOpenArticle: (id: string) => void;
+  // Segurar OK (long press, 500 ms no Pressable do Vega) abre as opções.
+  onLongPressArticle?: (id: string) => void;
   // Usados pela Home para devolver o foco ao card ao voltar do detalhe.
   register?: (key: string) => (node: View | null) => void;
   onFocusArticle?: (id: string) => void;
@@ -20,6 +22,7 @@ export const ArticleCard = memo(function ArticleCard({
   article,
   preferred,
   onOpenArticle,
+  onLongPressArticle,
   register,
   onFocusArticle,
 }: ArticleCardProps) {
@@ -35,6 +38,10 @@ export const ArticleCard = memo(function ArticleCard({
     () => onOpenArticle(article.id),
     [onOpenArticle, article.id],
   );
+  const handleLongPress = useCallback(
+    () => onLongPressArticle?.(article.id),
+    [onLongPressArticle, article.id],
+  );
 
   return (
     <Focusable
@@ -42,8 +49,10 @@ export const ArticleCard = memo(function ArticleCard({
       hasTVPreferredFocus={preferred}
       onFocus={handleFocus}
       onPress={handlePress}
+      onLongPress={onLongPressArticle ? handleLongPress : undefined}
       style={styles.card}
       focusedStyle={styles.cardFocused}
+      pressedStyle={styles.cardPressed}
       accessibilityRole="button"
       accessibilityLabel={`${article.titleStart} ${article.titleEnd}`}
     >
@@ -72,6 +81,11 @@ const styles = StyleSheet.create({
   },
   cardFocused: {
     borderColor: colors.focus,
+  },
+  // Feedback de clique: encolhe enquanto o OK está apertado (e segue assim
+  // durante o long press, até soltar).
+  cardPressed: {
+    transform: [{ scale: 0.95 }],
   },
   cardTitle: {
     ...text(typography.titleMd, colors.textHigh, '700'),

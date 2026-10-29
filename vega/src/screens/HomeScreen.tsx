@@ -5,13 +5,15 @@ import { useFocusRestore } from '../focus';
 import { articles } from '../content/articles';
 import { ArticleCard, CARD_GAP } from '../components/ArticleCard';
 import { Button } from '../components/Button';
+import { useCardOptions } from '../components/CardOptions';
 import { colors, px, safeArea, text, typography } from '../theme';
 import type { RootStackParamList } from '../navigation';
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
 
 export function HomeScreen({ navigation }: Props) {
-  const { remember, isPreferred, register } = useFocusRestore(articles[0].id);
+  const { remember, isPreferred, register, focusLast, lastKey } =
+    useFocusRestore(articles[0].id);
   const openArticle = useCallback(
     (id: string) => navigation.navigate('Detail', { id }),
     [navigation],
@@ -20,12 +22,23 @@ export function HomeScreen({ navigation }: Props) {
     () => navigation.navigate('Search', {}),
     [navigation],
   );
+  const openMyList = useCallback(
+    () => navigation.navigate('MyList'),
+    [navigation],
+  );
+  const options = useCardOptions({
+    isScreenFocused: navigation.isFocused,
+    lastKey,
+    focusLast,
+    onOpenArticle: openArticle,
+  });
 
   return (
     <View style={styles.screen}>
       <View style={styles.header}>
         <Text style={styles.headerBrand}>Amazon Fire Stick</Text>
         <View style={styles.headerRight}>
+          <Button label="Minha lista" variant="secondary" onPress={openMyList} />
           <Button label="Buscar" variant="secondary" onPress={openSearch} />
           <Text style={styles.headerOs}>VEGA OS</Text>
         </View>
@@ -48,9 +61,11 @@ export function HomeScreen({ navigation }: Props) {
             register={register}
             onFocusArticle={remember}
             onOpenArticle={openArticle}
+            onLongPressArticle={options.open}
           />
         ))}
       </View>
+      {options.panel}
     </View>
   );
 }
@@ -70,7 +85,7 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    columnGap: px(40),
+    columnGap: px(24),
   },
   headerBrand: text(typography.headlineSm, colors.primary, '700'),
   headerOs: {

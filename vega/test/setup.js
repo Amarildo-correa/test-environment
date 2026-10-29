@@ -37,3 +37,17 @@ jest.mock(
     };
   },
 );
+
+// O AsyncStorage do kepler grava num banco nativo que não existe no Jest.
+jest.mock(
+  '@amazon-devices/react-native-kepler/Libraries/Storage/AsyncStorage',
+  () => {
+    const store = new Map();
+    return {
+      getItem: jest.fn(async key => (store.has(key) ? store.get(key) : null)),
+      setItem: jest.fn(async (key, value) => {
+        store.set(key, value);
+      }),
+    };
+  },
+);
