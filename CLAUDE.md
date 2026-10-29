@@ -41,6 +41,7 @@ npx jest test/App.spec.tsx
 - **Vega CLI locally**: Docker container `vega-sdk-dl` (SDK in volume `vega-home`), e.g. `docker exec vega-sdk-dl bash -c 'export PATH=/root/vega/bin:$PATH; vega ...'`. `vega devmode` commands need `source /root/vega/dbus.env` first (keyring).
 - **Install on the physical Fire Stick** (developer mode already enabled, IP 192.168.1.2):
   `~/.claude/skills/vega-os-windows/scripts/vega-device.sh 192.168.1.2 release/HelloWorldTV.vpkg com.helloworldtv.app`
+- **See / drive / debug the TV** (`~/.claude/skills/vega-os-windows/scripts/vega-tv.sh`): `shot /tmp/tv.png` (1920×1080 screenshot to read), `key KEY_RIGHT KEY_ENTER KEY_BACK` (remote buttons), `logs com.helloworldtv.app` / `follow com.helloworldtv.app` (app logs).
 
 ### Assets
 ```bash
