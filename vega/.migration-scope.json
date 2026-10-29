@@ -1,0 +1,239 @@
+{
+  "flow": "rn",
+  "guide_path": "HelloTv_migration_guide.md",
+  "buckets": {
+    "core": "built",
+    "browse": "built",
+    "details": "built"
+  },
+  "units": {
+    "file:index.js": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:App.tsx": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:src/navigation.tsx": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:src/theme.ts": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:src/content/articles.ts": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:src/focus/Focusable.tsx": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:src/focus/useFocusRestore.ts": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:src/focus/index.ts": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:android/app/src/main/java/com/helloworldtv/app/MainApplication.kt": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:android/app/src/main/java/com/helloworldtv/app/MainActivity.kt": {
+      "bucket": "core",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-navigation/native": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-navigation/native-stack": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:react": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:react-native": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:react-native-safe-area-context": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:react-native-screens": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@babel/core": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@babel/preset-env": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@babel/runtime": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-native-community/cli": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-native-community/cli-platform-android": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-native-community/cli-platform-ios": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-native/babel-preset": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-native/eslint-config": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-native/metro-config": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@react-native/typescript-config": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@types/jest": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@types/react": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:@types/react-test-renderer": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:eslint": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:jest": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:prettier": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:react-test-renderer": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "dependency:typescript": {
+      "bucket": "core",
+      "bucket_confidence": "confirmed",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:src/screens/HomeScreen.tsx": {
+      "bucket": "browse",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    },
+    "file:src/screens/DetailScreen.tsx": {
+      "bucket": "details",
+      "bucket_confidence": "tentative",
+      "analysis_depth": "deep",
+      "build_status": "built"
+    }
+  },
+  "unclassified": [],
+  "history": [
+    {
+      "pass": 1,
+      "date": "2026-10-29",
+      "buckets_selected": [
+        "browse",
+        "core",
+        "details"
+      ]
+    }
+  ]
+}
