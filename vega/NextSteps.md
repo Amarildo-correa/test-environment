@@ -25,6 +25,7 @@ These actions MUST be completed by you outside the codebase. The migration workf
 - [ ] Ingestão de catálogo (CDF) com os 6 cards, usando o id do card (`1`–`6`) como `<ID>`/`amzn_id`. É o que faz a Alexa reconhecer "Desenvolva para a experiência na TV" como conteúdo do Hello World.
   - 📄 https://developer.amazon.com/docs/catalog/catalog-integration.html
 - [ ] Trocar para o **Target Navigator** (`com.amazon.kepler.media.ITargetNavigator`) quando o pacote `@amazon-devices/vega-target-navigator-provider` for publicado no npm: ele foi feito para "ir a uma tela/seção" sem catálogo. Em 2026-10-29 o pacote não existe no npm nem no SDK 0.24.9785, e a Amazon diz que o guia está "in development". O aparelho já aceita `kcp-cli-v2 target-navigator`.
+- **Teste no Fire TV Stick HD (Vega OS 2.0, 2026-10-29):** app instalado com o Content Launcher; por voz, a Alexa+ respondeu que não encontrou o card e que "o aplicativo não é compatível". Nenhum pedido chegou ao app. O `kcp-cli-v2 content-launcher launch` do aparelho devolve `status 126` para qualquer pacote no shell de modo desenvolvedor, então não serve para simular o pedido. Conclusão: a voz depende do Partner ID e do catálogo acima.
 - Account Login e Media Controls não foram integrados: o app não tem login nem mídia. A Amazon recomenda Account Login para apps com catálogo; reavaliar junto com o Partner ID.
 
 ---
