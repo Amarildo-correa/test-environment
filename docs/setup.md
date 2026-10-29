@@ -57,7 +57,7 @@ Este teste usou só builds de release (o JavaScript vai dentro do APK). Para o m
 ## Problemas encontrados
 
 - **Internet lenta (~100 KB/s):** o download do NDK pelo Gradle travou em 380 MB; ele foi baixado com `curl -C -` (retoma de onde parou) e extraído à mão. Ao extrair com `zipfile` do Python, os links simbólicos viram arquivos de texto; foi preciso recriá-los (35 links, incluindo o `clang`).
-- **Vega SDK:** o download do SDK caiu duas vezes dentro do Docker local pela mesma lentidão. Por isso o SDK roda no GitHub Actions.
+- **Vega SDK:** o download (1,23 GB) caiu algumas vezes por quedas da internet; depois que a conexão estabilizou, baixou em ~12 minutos dentro do container. O `.vpkg` de release continua sendo gerado no GitHub Actions (`vega-build.yml`).
 
 ## Instalar no Fire Stick físico (modo desenvolvedor) — testado em 2026-10-29
 
