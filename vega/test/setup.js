@@ -1,53 +1,17 @@
-// Correções para mocks de Jest do @amazon-devices/react-native-kepler 4.0.x:
-// - o mock de BackHandler exporta o objeto direto, mas o index.js do kepler
-//   lê `.default` (fica undefined e o React Navigation quebra ao montar);
-// - os mocks de addEventListener não devolvem a assinatura com `remove()`.
-// O jest.mock exige a fábrica inline; as duas usam este helper (o prefixo
-// `mock` permite referenciá-lo dentro da fábrica).
-const mockBackHandler = () => {
-  const BackHandler = {
-    addEventListener: jest.fn(() => ({ remove: jest.fn() })),
-    removeEventListener: jest.fn(),
-    exitApp: jest.fn(),
+// Os testes rodam sobre o react-native padrão (ver jest.config.json). O app é
+// desenhado em 1920×1080 e escalado pela largura da tela: fixa a tela da TV.
+jest.mock('react-native/Libraries/Utilities/Dimensions', () => {
+  const size = { width: 1920, height: 1080, scale: 1, fontScale: 1 };
+  return {
+    __esModule: true,
+    default: {
+      get: () => size,
+      set: jest.fn(),
+      addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+    },
   };
-  return { __esModule: true, default: BackHandler, ...BackHandler };
-};
-// O index.js do kepler resolve a variante da plataforma (BackHandler.kepler.js).
-jest.mock(
-  '@amazon-devices/react-native-kepler/Libraries/Utilities/BackHandler',
-  () => mockBackHandler(),
-);
-jest.mock(
-  '@amazon-devices/react-native-kepler/Libraries/Utilities/BackHandler.kepler',
-  () => mockBackHandler(),
-);
+});
 
-jest.mock(
-  '@amazon-devices/react-native-kepler/Libraries/Utilities/Dimensions',
-  () => {
-    const size = { width: 1920, height: 1080, scale: 1, fontScale: 1 };
-    return {
-      __esModule: true,
-      default: {
-        get: () => size,
-        set: jest.fn(),
-        addEventListener: jest.fn(() => ({ remove: jest.fn() })),
-        removeEventListener: jest.fn(),
-      },
-    };
-  },
-);
-
-// O AsyncStorage do kepler grava num banco nativo que não existe no Jest.
-jest.mock(
-  '@amazon-devices/react-native-kepler/Libraries/Storage/AsyncStorage',
-  () => {
-    const store = new Map();
-    return {
-      getItem: jest.fn(async key => (store.has(key) ? store.get(key) : null)),
-      setItem: jest.fn(async (key, value) => {
-        store.set(key, value);
-      }),
-    };
-  },
+jest.mock('react-native-safe-area-context', () =>
+  require('react-native-safe-area-context/jest/mock').default,
 );

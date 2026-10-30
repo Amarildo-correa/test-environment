@@ -1,5 +1,5 @@
 {
-  "preset": "@amazon-devices/react-native-kepler",
+  "preset": "react-native",
   "testRegex": "/test/.*\\.(test|spec)\\.(ts|tsx|js)$",
   "moduleFileExtensions": [
     "ts",
@@ -10,8 +10,12 @@
     "node"
   ],
   "moduleNameMapper": {
-    "^react-native$": "@amazon-devices/react-native-kepler",
-    "^react-native/(.*)$": "@amazon-devices/react-native-kepler/$1",
+    "^@amazon-devices/react-native-kepler$": "<rootDir>/test/__mocks__/react-native-kepler.js",
+    "^@amazon-devices/react-native-gesture-handler$": "react-native-gesture-handler",
+    "^@amazon-devices/react-native-safe-area-context$": "react-native-safe-area-context",
+    "^@amazon-devices/react-native-screens$": "react-native-screens",
+    "^@amazon-devices/react-navigation__native$": "@react-navigation/native",
+    "^@amazon-devices/react-navigation__stack$": "@react-navigation/stack",
     "^~/(.*)$": "<rootDir>/src/$1"
   },
   "modulePaths": [
@@ -23,7 +27,7 @@
     "<rootDir>/node_modules/"
   ],
   "transformIgnorePatterns": [
-    "node_modules/(?!(react-native|@react-native|@amazon-devices/react-native-kepler|@amazon-devices)/)"
+    "node_modules/(?!((jest-)?react-native(-[a-z-]+)?|@react-native|@react-navigation|@amazon-devices)/)"
   ],
   "collectCoverage": false,
   "collectCoverageFrom": [
@@ -34,7 +38,7 @@
   ],
   "coverageDirectory": ".tmp/coverage",
   "setupFiles": [
-    "./node_modules/@amazon-devices/react-native-gesture-handler/jestSetup.js",
+    "./node_modules/react-native-gesture-handler/jestSetup.js",
     "<rootDir>/test/setup.js"
   ]
 }

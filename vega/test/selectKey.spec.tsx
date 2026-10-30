@@ -28,11 +28,12 @@ function renderButton(onPress: jest.Mock, onLongPress?: jest.Mock) {
   return screen.getByLabelText('botão');
 }
 
-// Simula um aperto completo de OK chegando ao Pressable. No fluxo de teclas
-// de TV do Pressable do Vega, o onPress é chamado pelo próprio onPressOut.
+// Simula um aperto completo de OK chegando ao Pressable: pressIn, pressOut e,
+// em seguida, press (o Pressable chama onPress logo depois de onPressOut).
 function pressOk(button: ReturnType<typeof renderButton>) {
   fireEvent(button, 'pressIn');
   fireEvent(button, 'pressOut');
+  fireEvent.press(button);
 }
 
 describe('OK segurado de outro elemento', () => {

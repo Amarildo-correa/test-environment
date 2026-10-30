@@ -3,7 +3,10 @@ schema-version = 1
 [package]
 title = "Hello World TV"
 version = "1.0.0"
-id = "com.helloworldtv.app"
+# Piso para o `vpt validate` (template do SDK 2.0); cada envio à Appstore
+# precisa de um --build-number maior.
+build-number = 1
+id ="com.helloworldtv.app"
 icon = "@image/app_icon.png"
 
 # Desde o SDK 2.0 o build gera o [[needs.module]] /com.amazon.vega.os@IVega_*
