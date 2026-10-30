@@ -9,6 +9,16 @@ import { articles } from '../src/content/articles';
 // react-native-kepler referencia `Platform` sem importá-lo e quebra.
 jest.mock('../src/launch', () => ({ useLaunchMetrics: jest.fn() }));
 
+// O microfone e o servidor de transcrição só existem no aparelho.
+jest.mock('../src/speech/recorder', () => ({
+  startRecording: jest.fn(),
+  MicrophoneDeniedError: class MicrophoneDeniedError extends Error {},
+}));
+jest.mock('../src/speech/transcribe', () => ({
+  transcribe: jest.fn(),
+  TranscriptionNotConfiguredError: class extends Error {},
+}));
+
 // O stack navigator agenda animações com timers; com timers falsos e a
 // desmontagem no fim, nada roda depois que o ambiente de teste fecha.
 beforeEach(() => jest.useFakeTimers());
@@ -22,6 +32,7 @@ describe('App', () => {
     expect(screen.getByText('World')).toBeTruthy();
     expect(screen.getByLabelText('Buscar')).toBeTruthy();
     expect(screen.getByLabelText('Minha lista')).toBeTruthy();
+    expect(screen.getByLabelText('Gravar')).toBeTruthy();
     for (const article of articles) {
       expect(
         screen.getByLabelText(`${article.titleStart} ${article.titleEnd}`),
@@ -78,6 +89,19 @@ describe('App', () => {
     act(() => jest.runOnlyPendingTimers());
     expect(screen.getByText('‹ Voltar')).toBeTruthy();
     expect(screen.getByText('no Fire TV')).toBeTruthy();
+
+    act(() => jest.runOnlyPendingTimers());
+    screen.unmount();
+  });
+
+  it('o botão Gravar abre a tela Gravar', async () => {
+    const screen = render(<App />);
+    await act(async () => {});
+
+    fireEvent.press(screen.getByLabelText('Gravar'));
+    act(() => jest.runOnlyPendingTimers());
+    expect(screen.getByText('Gravar')).toBeTruthy();
+    expect(screen.getByText(/Aperte o microfone/)).toBeTruthy();
 
     act(() => jest.runOnlyPendingTimers());
     screen.unmount();

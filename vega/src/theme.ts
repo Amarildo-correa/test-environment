@@ -27,6 +27,7 @@ export const colors = {
   overlay: '#202225', // painéis sobre a tela
   primary: '#3FD8F8', // destaque e botão principal (ciano do logo Alexa+)
   onPrimary: '#000000', // texto sobre o ciano; branco teria só ~1,7:1
+  recording: '#FF6B5F', // botão de gravar enquanto o microfone está aberto
   secondary: '#57595D', // botão secundário (cinza 400)
   focus: '#FFFFFF', // borda de foco
   textHigh: '#FFFFFF',

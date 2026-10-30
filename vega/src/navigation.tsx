@@ -12,6 +12,7 @@ import { HomeScreen } from './screens/HomeScreen';
 import { DetailScreen } from './screens/DetailScreen';
 import { SearchScreen } from './screens/SearchScreen';
 import { MyListScreen } from './screens/MyListScreen';
+import { RecordScreen } from './screens/RecordScreen';
 import { colors } from './theme';
 
 export type RootStackParamList = {
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   Detail: { id: string };
   Search: { query?: string };
   MyList: undefined;
+  Record: undefined;
 };
 
 // Otimizações recomendadas pela Amazon para a navegação no Vega.
@@ -43,6 +45,7 @@ export function RootNavigator() {
         <Stack.Screen name="Detail" component={DetailScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
         <Stack.Screen name="MyList" component={MyListScreen} />
+        <Stack.Screen name="Record" component={RecordScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

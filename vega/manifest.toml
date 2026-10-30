@@ -14,6 +14,15 @@ target = "1.2"
 [[needs.module]]
 id = "/com.amazon.vega.os@IVega_1_2"
 
+# Tela Gravar: microfone (privilégio de execução, o usuário autoriza na
+# primeira gravação) usado pela keplerscript-audio-lib.
+[[needs.privilege]]
+id = "com.amazon.audio.privilege.microphone.access"
+
+# Exigido pelo lint do Vega para qualquer uso da keplerscript-audio-lib.
+[[needs.privilege]]
+id = "com.amazon.audio.privilege.settings.control"
+
 # Teclado virtual do sistema para o campo da tela Buscar.
 [wants]
 [[wants.service]]

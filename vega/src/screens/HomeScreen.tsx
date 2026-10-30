@@ -26,6 +26,10 @@ export function HomeScreen({ navigation }: Props) {
     () => navigation.navigate('MyList'),
     [navigation],
   );
+  const openRecord = useCallback(
+    () => navigation.navigate('Record'),
+    [navigation],
+  );
   const options = useCardOptions({
     isScreenFocused: navigation.isFocused,
     lastKey,
@@ -39,6 +43,7 @@ export function HomeScreen({ navigation }: Props) {
         <Text style={styles.headerBrand}>Amazon Fire Stick</Text>
         <View style={styles.headerRight}>
           <Button label="Minha lista" variant="secondary" onPress={openMyList} />
+          <Button label="Gravar" variant="secondary" onPress={openRecord} />
           <Button label="Buscar" variant="secondary" onPress={openSearch} />
           <Text style={styles.headerOs}>VEGA OS</Text>
         </View>
