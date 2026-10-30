@@ -38,10 +38,19 @@ npx tsc --noEmit && npm run lint && npx jest
 npx jest test/App.spec.tsx
 ```
 - **Release `.vpkg`**: pushing changes under `vega/` runs `.github/workflows/vega-build.yml` (installs SDK, `vega project install --fix`, `vega project doctor --rn-version 0.83`, lint, tests, `npm run build:release`). Download with `gh run download <id> -n hello-world-tv-vpkg`. The Fire TV Stick uses the **armv7** package.
+- **Vega SDK version**: 2.0.13986, pinned in `vega-build.yml` / `vega-scaffold.yml` (`VEGA_SDK_VERSION`) and active in the container. Check for newer ones with `vega sdk list-remote`.
 - **Vega CLI locally**: Docker container `vega-sdk-dl` (SDK in volume `vega-home`), e.g. `docker exec vega-sdk-dl bash -c 'export PATH=/root/vega/bin:$PATH; vega ...'`. `vega devmode` commands need `source /root/vega/dbus.env` first (keyring).
+- **Local doctor/build in the container** (Node 22 in `/root/vega/node22`; the repo is not mounted, copy the committed tree):
+  ```bash
+  docker exec vega-sdk-dl bash -c 'rm -rf /root/work && mkdir -p /root/work'
+  git archive HEAD vega | docker exec -i vega-sdk-dl tar -x -C /root/work
+  docker exec vega-sdk-dl bash -c 'export PATH=/root/vega/node22/bin:/root/vega/bin:$PATH; cd /root/work/vega && npm install --legacy-peer-deps && vega project doctor --rn-version 0.83 && npm run build:release'
+  docker cp vega-sdk-dl:/root/work/vega/build/armv7-release/hellotv_armv7.vpkg release/HelloWorldTV.vpkg
+  ```
 - **Install on the physical Fire Stick** (developer mode already enabled, IP 192.168.1.2):
   `~/.claude/skills/vega-os-windows/scripts/vega-device.sh 192.168.1.2 release/HelloWorldTV.vpkg com.helloworldtv.app`
-- **See / drive / debug the TV** (`~/.claude/skills/vega-os-windows/scripts/vega-tv.sh`): `shot /tmp/tv.png` (1920×1080 screenshot to read), `key KEY_RIGHT KEY_ENTER KEY_BACK` (remote buttons), `logs com.helloworldtv.app` / `follow com.helloworldtv.app` (app logs).
+  Remote keys may still go to the Fire TV launcher afterwards: relaunch on the device with `vlcm launch-app orpheus://com.helloworldtv.app.main` before sending keys.
+- **See / drive / debug the TV** (`~/.claude/skills/vega-os-windows/scripts/vega-tv.sh`): `shot /tmp/tv.png` (1920×1080 screenshot to read), `key KEY_RIGHT KEY_ENTER KEY_BACK` (remote buttons), `logs com.helloworldtv.app` / `follow com.helloworldtv.app` (app logs). Works while the TV shows another input. A 0-byte/black shot usually means another app with DRM video (Fire TV launcher, Netflix) is in front: check `vlcm list` on the device.
 
 ### Assets
 ```bash
@@ -59,9 +68,10 @@ Both apps share the same structure under `src/`: `theme.ts` (layout drawn in 192
 Other Vega-specific differences (keep them when editing `vega/`):
 - Packages are the Amazon forks (`@amazon-devices/react-navigation__native`, `__stack`, `react-native-screens`, `react-native-safe-area-context`, `react-native-gesture-handler`). Navigation uses `createStackNavigator` (not native-stack) and the app is wrapped in `GestureHandlerRootView`; `enableScreens()`/`enableFreeze()` run in `navigation.tsx`.
 - `src/launch.ts` holds the mandatory splash/TTFD hooks; tests mock this module because the hooks break under Jest.
-- `test/setup.js` patches broken `react-native-kepler` Jest mocks (BackHandler `.kepler` variant, `Dimensions.addEventListener`); `jest.config.json` maps `react-native` to the kepler package.
-- No nested `<Text>` (title is two sibling `Text`s); handlers/styles are memoized because the template has no React Compiler.
-- `app.json` name, `AppRegistry` name and the `manifest.toml` interactive component id must all be `com.helloworldtv.app.main`. Don't hand-edit `runtime-module` in `manifest.toml`.
+- Jest (SDK 2.0 model): the `@amazon-devices/*` npm packages only ship types (their code is in the device's system bundles), so tests run on stock `react-native` (`preset: "react-native"`). `test/__mocks__/react-native-kepler.js` mocks the Vega APIs the app uses, `jest.config.json` maps each Amazon fork to the same-version upstream library (devDependencies `@react-navigation/*`, `react-native-screens`, `react-native-safe-area-context`, `react-native-gesture-handler`), and `test/setup.js` pins `Dimensions` to 1920×1080. Add new Vega APIs to the mock when the app starts using them.
+- No nested `<Text>` (title is two sibling `Text`s); handlers/styles are memoized because the template (also the SDK 2.0 one) has no React Compiler.
+- `SearchScreen`: `onSubmitEditing` ignores `submitAction === 'previous'` (Back on the system keyboard, SDK 2.0 behavior); the type is declared locally because the `react-native` types lack `submitAction`.
+- `app.json` name, `AppRegistry` name and the `manifest.toml` interactive component id must all be `com.helloworldtv.app.main`. Don't hand-edit `runtime-module` in `manifest.toml`, and don't add `[[needs.module]] /com.amazon.vega.os@IVega_*`: with SDK 2.0 the build generates it from `[os.version]` (min/target 2.0).
 - Do not commit `vega/package-lock.json` (a WSL lock breaks ESLint plugin resolution in CI); after a CI run, copy back the `package.json` that `vega project install --fix` aligned (artifact `vega-resolved-deps`).
 
 `androidtv/` pins `react-native-screens ~4.25` (4.26+ needs RN 0.84) and needs `legacy-peer-deps` because tvOS versions like `0.83.10-1` are semver prereleases.
