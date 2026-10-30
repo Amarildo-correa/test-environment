@@ -70,6 +70,11 @@ Other Vega-specific differences (keep them when editing `vega/`):
 
 `.adbt-config.json` maps the repo root to `fire_os` and `vega/` to `vega_os`. Before other ADBT MCP calls in a session, call `set_project_context` with that file's contents, then pass `target_platform` (`{"device_os": ["vega_os"]}` for `vega/`) to `search_documentation`/`list_documents`.
 
+**Installation**: the server is the npm package `@amazon-devices/amazon-devices-buildertools-mcp` (formerly `vega-devtools-mcp`; needs Node 18+). It is registered in the committed `.mcp.json` as `amazon-devices-buildertools` and launched via `npx`, so it works in WSL and in cloud sessions without extra setup. Open a new session in the repo and approve the server when Claude Code asks; its tools appear as `mcp__amazon-devices-buildertools__*`.
+- Don't run the official `npx -y @amazon-devices/amazon-devices-buildertools-mcp@latest --init-context`: it opens an interactive agent menu (ignores `--agent`) and wants to write its own steering text into `CLAUDE.md`. `--check-status` verifies a setup.
+- Perf/crash tools (`analyze_perfetto_traces`, `get_app_hot_functions`, `symbolicate_acr`) need the Vega SDK, which is only in the local Docker container (`vega-sdk-dl`), not in cloud sessions. Documentation tools work anywhere.
+- Docs: https://developer.amazon.com/docs/vega/0.24/mcp-server
+
 ## Publishing
 
 Remote: `github.com/Amarildo-correa/test-environment` (public). GitHub Pages serves `docs/` at https://amarildo-correa.github.io/test-environment/. Store listing fields must not mention "Vega".
