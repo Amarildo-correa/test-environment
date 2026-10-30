@@ -21,18 +21,23 @@
   "dependencies": {
     "@amazon-devices/kepler-performance-api": "~0.1.4",
     "@amazon-devices/keplerscript-audio-lib": "~2.0.18",
-    "@amazon-devices/react-native-gesture-handler": "~4.0.0+2.29.0",
-    "@amazon-devices/react-native-kepler": "~4.0.0+rn0.83.0",
-    "@amazon-devices/react-native-safe-area-context": "~8.0.9000000000+5.2.0",
-    "@amazon-devices/react-native-screens": "~3.0.9000000001",
-    "@amazon-devices/react-navigation__native": "~8.0.9000000000+7.1.22",
-    "@amazon-devices/react-navigation__stack": "~8.0.9000000000+7.6.8",
+    "@amazon-devices/react-native-gesture-handler": "<4.0.2",
+    "@amazon-devices/react-native-kepler": "<4.0.2",
+    "@amazon-devices/react-native-safe-area-context": "<8.0.9000000002",
+    "@amazon-devices/react-native-screens": "<3.0.9000000003",
+    "@amazon-devices/react-navigation__native": "<8.0.9000000002",
+    "@amazon-devices/react-navigation__stack": "<8.0.9000000002",
     "@amazon-devices/security-manager-lib": "~1.0.1767254405",
     "react": "19.2.0",
     "react-native": "0.83.0"
   },
   "engines": {
     "node": ">=20"
+  },
+  "overrides": {
+    "@amazon-devices/react-navigation__core": "<8.0.9000000002",
+    "@amazon-devices/react-navigation__routers": "<8.0.9000000002",
+    "@amazon-devices/react-navigation__elements": "<8.0.9000000002"
   },
   "devDependencies": {
     "@amazon-devices/eslint-plugin-kepler": "^0.1.4",
