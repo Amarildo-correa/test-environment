@@ -12,7 +12,8 @@ on:
   workflow_dispatch:
 
 env:
-  VEGA_SDK_VERSION: 0.24.12112
+  # Vazio = SDK mais recente (descobrir a versão 2.0.x e fixar aqui).
+  VEGA_SDK_VERSION: ""
 
 jobs:
   build:

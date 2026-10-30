@@ -6,13 +6,11 @@ version = "1.0.0"
 id = "com.helloworldtv.app"
 icon = "@image/app_icon.png"
 
+# Desde o SDK 2.0 o build gera o [[needs.module]] /com.amazon.vega.os@IVega_*
+# a partir destes valores; não declarar à mão.
 [os.version]
-min = "1.2"
-target = "1.2"
-
-[needs]
-[[needs.module]]
-id = "/com.amazon.vega.os@IVega_1_2"
+min = "2.0"
+target = "2.0"
 
 # Teclado virtual do sistema para o campo da tela Buscar.
 [wants]

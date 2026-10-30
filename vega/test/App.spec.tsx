@@ -37,12 +37,19 @@ describe('App', () => {
     fireEvent.press(screen.getByLabelText('Buscar'));
     act(() => jest.runOnlyPendingTimers());
     const input = screen.getByLabelText('Campo de busca');
+    const submit = (submitAction?: string) =>
+      fireEvent(input, 'submitEditing', { nativeEvent: { submitAction } });
     fireEvent.changeText(input, 'área segura');
-    fireEvent(input, 'submitEditing');
+    submit();
     expect(screen.getByText('Resultados para “área segura”')).toBeTruthy();
     expect(screen.getByLabelText('Área segura nas bordas da tela')).toBeTruthy();
     fireEvent.changeText(input, 'futebol');
-    fireEvent(input, 'submitEditing');
+    submit();
+    expect(screen.getByText('Nenhum card encontrado para “futebol”.')).toBeTruthy();
+
+    // Voltar no teclado (submitAction 'previous') só fecha, sem buscar.
+    fireEvent.changeText(input, 'foco');
+    submit('previous');
     expect(screen.getByText('Nenhum card encontrado para “futebol”.')).toBeTruthy();
 
     act(() => jest.runOnlyPendingTimers());

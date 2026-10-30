@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
+import type { NativeSyntheticEvent } from 'react-native';
 import type { StackScreenProps } from '@amazon-devices/react-navigation__stack';
 import { searchArticles } from '../content/search';
 import { ArticleCard, CARD_GAP } from '../components/ArticleCard';
@@ -15,6 +16,9 @@ import type { RootStackParamList } from '../navigation';
 
 type Props = StackScreenProps<RootStackParamList, 'Search'>;
 
+// `submitAction` vem do TextInput do Vega; os tipos do react-native não o têm.
+type SubmitEvent = NativeSyntheticEvent<{ text: string; submitAction?: string }>;
+
 // Busca pelos cards, aberta pelo botão Buscar da Home. O parâmetro `query`
 // permite abrir a tela já com uma busca feita.
 export function SearchScreen({ navigation, route }: Props) {
@@ -24,7 +28,16 @@ export function SearchScreen({ navigation, route }: Props) {
   const [inputFocused, setInputFocused] = useState(false);
   const results = useMemo(() => searchArticles(query), [query]);
 
-  const submit = useCallback(() => setQuery(text), [text]);
+  // No Vega OS, o Voltar também dispara onSubmitEditing, com submitAction
+  // 'previous': só fecha o teclado, sem buscar.
+  const submit = useCallback(
+    (e: SubmitEvent) => {
+      if (e.nativeEvent.submitAction !== 'previous') {
+        setQuery(text);
+      }
+    },
+    [text],
+  );
   const handleInputFocus = useCallback(() => setInputFocused(true), []);
   const handleInputBlur = useCallback(() => setInputFocused(false), []);
   const openArticle = useCallback(

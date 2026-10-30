@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 "Hello World TV": one small TV app implemented twice, used to validate developing **Vega OS** (Amazon Fire TV) apps from **Windows + WSL2**, where the Vega SDK is not officially supported.
 
 - `androidtv/` — source app, **react-native-tvos 0.83** (Android TV / Fire OS). Builds an APK.
-- `vega/` — the same app ported to **React Native for Vega 0.83** (Vega SDK 0.24.x). Builds a `.vpkg`. Ported following the Amazon "Port TV App to Vega" workflow; `vega/HelloTv_migration_guide.md` documents every change and `vega/NextSteps.md` lists open items.
+- `vega/` — the same app ported to **React Native for Vega 0.83** (Vega SDK 2.0, Vega OS 2.0 minimum). Builds a `.vpkg`. Ported following the Amazon "Port TV App to Vega" workflow; `vega/HelloTv_migration_guide.md` documents every change and `vega/NextSteps.md` lists open items.
 - `docs/` — GitHub Pages site (`index.html` landing page, `privacidade.html` privacy policy), `setup.md` (environment how-to), Android TV screenshots.
 - `release/` — store assets, PT-BR store texts, submission and device test guides. `*.apk`/`*.vpkg` are git-ignored.
 - `scripts/` — `env.sh` (JDK 17 + Android SDK paths for WSL) and `make-assets.mjs` (banner, icons, store images, Vega icon and splash zip from SVG via `sharp`).
